@@ -91,7 +91,7 @@ public class ValidationControllerIntegrationTest {
   }
 
   @Test
-  void RepeatedCharacter() {
+  void repeatedCharacter() {
     PasswordRequest requestPayload = new PasswordRequest("abtp9fo!II");
 
     HttpEntity<PasswordRequest> entity = new HttpEntity<PasswordRequest>(requestPayload, headers);
@@ -106,7 +106,7 @@ public class ValidationControllerIntegrationTest {
   }
 
   @Test
-  void NonSpace() {
+  void nonSpace() {
     PasswordRequest requestPayload = new PasswordRequest("abtp9fo! kI");
 
     HttpEntity<PasswordRequest> entity = new HttpEntity<PasswordRequest>(requestPayload, headers);
@@ -115,6 +115,36 @@ public class ValidationControllerIntegrationTest {
 
     List<String> errorMsg = new ArrayList<String>();
     errorMsg.add("A senha não deve conter espaços");
+
+    assertEquals(400, response.getStatusCodeValue());
+    assertEquals(errorMsg, response.getBody().getErrors());
+  }
+
+  @Test
+  void minimumCharacter() {
+    PasswordRequest requestPayload = new PasswordRequest("AbTp9!");
+
+    HttpEntity<PasswordRequest> entity = new HttpEntity<PasswordRequest>(requestPayload, headers);
+
+    ResponseEntity<ErrorResponse> response = post(entity, ErrorResponse.class, "/api/passwords/validation");
+
+    List<String> errorMsg = new ArrayList<String>();
+    errorMsg.add("A senha deve conter ao menos 9 caracteres");
+
+    assertEquals(400, response.getStatusCodeValue());
+    assertEquals(errorMsg, response.getBody().getErrors());
+  }
+
+  @Test
+  void onceNumber() {
+    PasswordRequest requestPayload = new PasswordRequest("AbTp!fokinmz");
+
+    HttpEntity<PasswordRequest> entity = new HttpEntity<PasswordRequest>(requestPayload, headers);
+
+    ResponseEntity<ErrorResponse> response = post(entity, ErrorResponse.class, "/api/passwords/validation");
+
+    List<String> errorMsg = new ArrayList<String>();
+    errorMsg.add("A senha deve conter ao menos um digito");
 
     assertEquals(400, response.getStatusCodeValue());
     assertEquals(errorMsg, response.getBody().getErrors());
