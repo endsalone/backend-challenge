@@ -17,7 +17,7 @@ Busquei manter o código legivel e desaclopado, também busquei retornar como re
 
 Para baixar o projeto o projeto na maquina faça uso do github
 ```sh
-$ git clone https://github.com/endsalone/backend-challenge
+$ git clone git@github.com:endsalone/backend-challenge.git
 ```
 
 Para executar o projeto basta executar no terminal o seguinte comando dentro da pasta raiz em que o projeto foi baixado:
